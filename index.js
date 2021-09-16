@@ -57,10 +57,8 @@ function getWinners(worldCupData, getFinalsCB) {
   return getFinalsCB(worldCupData).map(function (finalsGame) {
     if (finalsGame["Home Team Goals"] < finalsGame["Away Team Goals"]) {
       return finalsGame["Away Team Name"];
-    } else if (finalsGame["Home Team Goals"] > finalsGame["Away Team Goals"]) {
-      return finalsGame["Home Team Name"];
     } else {
-      return "Tie!";
+      return finalsGame["Home Team Name"];
     }
   });
 }
@@ -76,24 +74,35 @@ Use the higher-order function getWinnersByYear to do the following:
 hint: the strings returned need to exactly match the string in step 4.
  */
 
-function getWinnersByYear(/* code here */) {
-  /* code here */
+function getWinnersByYear(worldCupData, getYearsCB, getWinnersCB) {
+  const winners = getWinnersCB(worldCupData, getFinals);
+  const years = getYearsCB(worldCupData, getFinals);
+  return winners.map(
+    (country, index) => `In ${years[index]}, ${country} won the world cup!`
+  );
 }
-
+console.log("Task 5:", getWinnersByYear(fifaData, getYears, getWinners));
 /* 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀 Task 6: 🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀
 Use the higher order function getAverageGoals to do the following: 
  1. Receive the callback function getFinals from task 2 ensure you pass in the data as an argument
- 2. Return the the average number of the total home team goals and away team goals scored per match and round to the second decimal place. 
+ 2. Return the average number of the total home team goals and away team goals scored per match and round to the second decimal place. 
  
  (Hint: use .reduce and do this in 2 steps) 
  
  Example of invocation: getAverageGoals(getFinals(fifaData));
 */
 
-function getAverageGoals(/* code here */) {
-  /* code here */
+function getAverageGoals(getFinalsCB) {
+  const totalGoals = getFinalsCB.reduce(function (accumulator, finalsGame) {
+    return (
+      accumulator +
+      finalsGame["Home Team Goals"] +
+      finalsGame["Away Team Goals"]
+    );
+  }, 0);
+  return (totalGoals / getFinalsCB.length).toFixed(2);
 }
-
+console.log(getAverageGoals(getFinals(fifaData)));
 /// 🥅 STRETCH 🥅 ///
 
 /* 💪💪💪💪💪 Stretch 1: 💪💪💪💪💪 
